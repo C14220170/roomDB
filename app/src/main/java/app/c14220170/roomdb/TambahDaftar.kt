@@ -79,6 +79,7 @@ class TambahDaftar : AppCompatActivity() {
                     pilihid = iID,
                 )
             }
+            finish()
         }
     }
 }
