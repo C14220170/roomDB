@@ -1,6 +1,7 @@
 package app.c14220170.roomdb
 
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import androidx.activity.enableEdgeToEdge
@@ -33,6 +34,9 @@ class TambahDaftar : AppCompatActivity() {
         val etItem = findViewById<EditText>(R.id.etItem)
         val etJumlah = findViewById<EditText>(R.id.etJumlah)
 
+        var iID : Int = 0
+        var iAddEdit : Int = 0
+
         btnTambah.setOnClickListener {
             CoroutineScope(Dispatchers.IO).async {
                 DB.fundaftarBelanjaDAO().insert(
@@ -44,6 +48,37 @@ class TambahDaftar : AppCompatActivity() {
                 )
             }
             finish()
+        }
+
+        iID = intent.getIntExtra("id", 0)
+        iAddEdit = intent.getIntExtra("addEdit", 0)
+
+        if (iAddEdit == 0) {
+            btnTambah.visibility = View.VISIBLE
+            btnUpdate.visibility = View.GONE
+            etItem.isEnabled = true
+        }
+        else {
+            btnTambah.visibility = View.GONE
+            btnUpdate.visibility = View.VISIBLE
+            etItem.isEnabled = false
+
+            CoroutineScope(Dispatchers.IO).async {
+                val item = DB.fundaftarBelanjaDAO().getItem(iID)
+                etItem.setText(item.item)
+                etJumlah.setText(item.jumlah)
+            }
+        }
+
+        btnUpdate.setOnClickListener {
+            CoroutineScope(Dispatchers.IO).async {
+                DB.fundaftarBelanjaDAO().update(
+                    isi_tanggal = tanggal,
+                    isi_item = etItem.text.toString(),
+                    isi_jumlah = etJumlah.text.toString(),
+                    pilihid = iID,
+                )
+            }
         }
     }
 }

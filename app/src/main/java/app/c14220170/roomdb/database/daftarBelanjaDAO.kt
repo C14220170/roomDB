@@ -11,8 +11,8 @@ interface daftarBelanjaDAO {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(daftar: daftarBelanja)
 
-    @Query("UPDATE daftarBelanja SET tanggal=:isi_tanggal, item=:isi_item, jumlah=:isi_jumlah, status=:isi_status WHERE Id=:pilihid")
-    fun update(isi_tanggal: String, isi_item: String, isi_jumlah: String, isi_status: Int, pilihid: Int)
+    @Query("UPDATE daftarBelanja SET tanggal=:isi_tanggal, item=:isi_item, jumlah=:isi_jumlah WHERE Id=:pilihid")
+    fun update(isi_tanggal: String, isi_item: String, isi_jumlah: String, pilihid: Int)
 
 
     @Delete
@@ -20,4 +20,7 @@ interface daftarBelanjaDAO {
 
     @Query("SELECT * FROM daftarBelanja ORDER BY id asc")
     fun selectAll(): MutableList<daftarBelanja>
+
+    @Query("SELECT * FROM daftarBelanja WHERE id=:isi_id")
+    suspend fun getItem(isi_id: Int): daftarBelanja
 }
