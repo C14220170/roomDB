@@ -3,6 +3,7 @@ package app.c14220170.roomdb
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -45,6 +46,11 @@ class MainActivity : AppCompatActivity() {
         val _fabAdd = findViewById<FloatingActionButton>(R.id.fabAdd)
         _fabAdd.setOnClickListener {
             startActivity(Intent(this, TambahDaftar::class.java))
+        }
+
+        val _btnHistory = findViewById<Button>(R.id.btnHistory)
+        _btnHistory.setOnClickListener {
+            startActivity(Intent(this, history::class.java))
         }
 
         adapterDaftar.setOnItemClickCallback(
