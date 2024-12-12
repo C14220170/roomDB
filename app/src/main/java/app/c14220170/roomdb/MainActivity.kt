@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.c14220170.roomdb.database.daftarBelanja
 import app.c14220170.roomdb.database.daftarBelanjaDB
+import app.c14220170.roomdb.database.historyBarang
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -18,8 +19,11 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
+    //Hubungin db
     private lateinit var DB : daftarBelanjaDB
+    //Hubungin arDaftar dengan recyclerview
     private lateinit var adapterDaftar : adapterDaftar
+    //Penyimpanan sementara data daftarBelanja
     private var arDaftar : MutableList<daftarBelanja> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,6 +51,23 @@ class MainActivity : AppCompatActivity() {
             object : adapterDaftar.OnItemClickCallback {
                 override fun delData(dtBelanja: daftarBelanja) {
                     CoroutineScope(Dispatchers.IO).async {
+                        DB.fundaftarBelanjaDAO().delete(dtBelanja)
+                        val daftar = DB.fundaftarBelanjaDAO().selectAll()
+                        withContext(Dispatchers.Main) {
+                            adapterDaftar.isiData(daftar)
+                        }
+                    }
+                }
+                override fun doneData(dtBelanja: daftarBelanja) {
+                    CoroutineScope(Dispatchers.IO).async {
+                        DB.fundhistoryBarangDAO().insert(
+                            historyBarang(
+                                tanggal = dtBelanja.tanggal,
+                                item = dtBelanja.item,
+                                jumlah = dtBelanja.jumlah
+                            )
+                        )
+
                         DB.fundaftarBelanjaDAO().delete(dtBelanja)
                         val daftar = DB.fundaftarBelanjaDAO().selectAll()
                         withContext(Dispatchers.Main) {

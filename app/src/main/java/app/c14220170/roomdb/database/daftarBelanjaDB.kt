@@ -5,9 +5,10 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [daftarBelanja::class], version = 1)
+@Database(entities = [daftarBelanja::class, historyBarang::class], version = 2)
 abstract class daftarBelanjaDB : RoomDatabase() {
     abstract fun fundaftarBelanjaDAO(): daftarBelanjaDAO
+    abstract fun fundhistoryBarangDAO(): historyBarangDAO
 
     companion object{
         @Volatile
@@ -20,6 +21,7 @@ abstract class daftarBelanjaDB : RoomDatabase() {
                     INSTANCE = Room.databaseBuilder(context.applicationContext,
                         daftarBelanjaDB::class.java, "daftarBelanja_db")
                         .allowMainThreadQueries()
+                        .fallbackToDestructiveMigration()
                         .build()
                 }
             }

@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "app.c14220170.roomdb"
-        minSdk = 33
+        minSdk = 30
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
